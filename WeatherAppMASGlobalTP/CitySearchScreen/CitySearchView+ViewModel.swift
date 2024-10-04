@@ -1,5 +1,5 @@
 //
-//  SearchResultListView+ViewModel.swift
+//  CitySearchView+ViewModel.swift
 //  WeatherAppMASGlobalTP
 //
 //  Created by Gokul P on 04/10/24.
@@ -9,7 +9,7 @@ import Foundation
 import Observation
 import SwiftUI
 
-extension SearchResultListView {
+extension CitySearchView {
 
     @Observable
     final class ViewModel {
@@ -26,6 +26,7 @@ extension SearchResultListView {
 
         func performCitySearch(searchString: String) async {
             guard searchString.count >= 3 else {
+                loadState = .loading
                 return
             }
             let isZipCode = searchString.allSatisfy(\.isNumber)

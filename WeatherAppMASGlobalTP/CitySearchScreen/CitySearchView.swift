@@ -1,5 +1,5 @@
 //
-//  SearchResultListView.swift
+//  CitySearchView.swift
 //  WeatherAppMASGlobalTP
 //
 //  Created by Gokul P on 04/10/24.
@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct SearchResultListView: View {
+struct CitySearchView: View {
 
-    @Binding var searchString: String
+    @State var searchString = ""
     @State var viewModel = ViewModel()
     @State private var searchTask: Task<Void, Never>?
 
@@ -17,7 +17,13 @@ struct SearchResultListView: View {
         VStack {
             switch viewModel.loadState {
             case .loading:
-                ProgressView()
+                VStack {
+                    Image(systemName: "magnifyingglass")
+                        .font(.system(size: 40))
+                    Text("Search City name or Zipcode")
+                        .font(.subheadline)
+                }
+                .opacity(0.7)
             case let .success(cityList):
                 List {
                     ForEach(cityList, id: \.self, content: { city in
@@ -36,12 +42,14 @@ struct SearchResultListView: View {
                 errorView
             }
         }
+        .searchable(text: $searchString)
         .onChange(of: searchString) { _, newValue in
             searchTask?.cancel()
             searchTask = Task {
                 await viewModel.performCitySearch(searchString: newValue)
             }
         }
+        .navigationTitle("Search Cities")
     }
 
     var errorView: some View {
@@ -54,5 +62,5 @@ struct SearchResultListView: View {
 }
 
 #Preview {
-    SearchResultListView(searchString: .constant(""))
+    CitySearchView()
 }
