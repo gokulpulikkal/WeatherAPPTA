@@ -13,91 +13,30 @@ struct WeatherHomeScreen: View {
 
     var body: some View {
         ZStack {
-            LinearGradient(gradient: Gradient(colors: [.blue, .white]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                .ignoresSafeArea()
-            switch viewModel.loadState {
-            case .loading:
-                ProgressView()
-            case let .success(weatherResponse):
-                ScrollView {
-                    mainWeatherHeader(weatherResponse)
-                }
-                .padding()
-            case .failure:
-                errorView
-            }
-        }
-        .task {
-            await viewModel.getCurrentWeatherData()
-        }
-    }
-
-    @ViewBuilder
-    private func mainWeatherHeader(_ weatherResponse: WeatherResponse) -> some View {
-        HStack {
-            AsyncImage(url: weatherResponse.weather.first?.iconURL) { image in
-                image.resizable()
-                    .scaledToFill()
-            } placeholder: {
-                ProgressView()
-            }
-            .frame(width: 150, height: 150)
-            VStack(alignment: .center) {
-                VStack(alignment: .leading) {
-                    Text(weatherResponse.name)
-                        .font(.system(size: 24))
-                        .fontWeight(.semibold)
-                    Text(
-                        Measurement<UnitTemperature>(value: weatherResponse.main.temp.rounded(), unit: .celsius)
-                            .formatted(.measurement(
-                                width: .narrow,
-                                usage: .weather
-                            ))
+            LinearGradient(
+                gradient: Gradient(colors: [.blue, .white]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+            ScrollView {
+                WeatherHomeHeaderView()
+                WeatherHourlyForecastView()
+                    .frame(height: 100)
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(
+                                .white.opacity(0.2)
+                                    .shadow(.drop(
+                                        color: .black.opacity(0.3),
+                                        radius: 10
+                                    ))
+                            )
                     )
-                    .font(.system(size: 70))
-                    .fontWeight(.semibold)
-                }
-                Text(weatherResponse.weather.first?.description ?? "")
-                    .font(.system(size: 20))
-                    .opacity(0.7)
-                HStack {
-                    HStack(spacing: 0) {
-                        Text("H:")
-                        Text(
-                            Measurement<UnitTemperature>(
-                                value: weatherResponse.main.temp.rounded(),
-                                unit: .celsius
-                            )
-                            .formatted(.measurement(
-                                width: .narrow,
-                                usage: .weather
-                            ))
-                        )
-                    }
-                    HStack(spacing: 0) {
-                        Text("L:")
-                        Text(
-                            Measurement<UnitTemperature>(
-                                value: weatherResponse.main.temp.rounded(),
-                                unit: .celsius
-                            )
-                            .formatted(.measurement(
-                                width: .narrow,
-                                usage: .weather
-                            ))
-                        )
-                    }
-                }
-                .fontWeight(.semibold)
+                    .padding(.vertical)
             }
-        }
-    }
-
-    var errorView: some View {
-        VStack {
-            Image(systemName: "exclamationmark.triangle")
-                .font(.system(size: 80))
-            Text("Error connecting to backend")
+            .padding()
         }
     }
 }

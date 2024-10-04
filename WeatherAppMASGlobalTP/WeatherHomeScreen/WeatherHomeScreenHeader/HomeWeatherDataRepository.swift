@@ -7,7 +7,7 @@
 
 import Foundation
 
-class HomeWeatherDataRepository: HomeWeatherDataRepositoryProtocol, NetworkServiceProtocol {
+class HomeWeatherHeaderDataRepository: HomeWeatherHeaderDataRepositoryProtocol, NetworkServiceProtocol {
 
     func getCurrentWeather() async throws -> WeatherResponse {
         guard let request = Endpoint.getCurrentWeather.request else {

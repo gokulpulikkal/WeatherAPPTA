@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol HomeWeatherDataRepositoryProtocol {
+protocol HomeWeatherHeaderDataRepositoryProtocol {
 
     func getCurrentWeather() async throws -> WeatherResponse
 

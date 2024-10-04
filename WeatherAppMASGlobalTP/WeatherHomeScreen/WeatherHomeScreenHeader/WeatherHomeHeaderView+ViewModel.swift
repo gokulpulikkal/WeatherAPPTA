@@ -1,21 +1,19 @@
 //
-//  WeatherHomeScreen+ViewModel.swift
+//  WeatherHomeHeaderView+ViewModel.swift
 //  WeatherAppMASGlobalTP
 //
-//  Created by Gokul P on 03/10/24.
+//  Created by Gokul P on 04/10/24.
 //
 
+import Foundation
 import Observation
-import SwiftUI
 
-extension WeatherHomeScreen {
-
+extension WeatherHomeHeaderView {
     @Observable
     final class ViewModel {
 
         var homeWeatherHeaderDataRepository: HomeWeatherHeaderDataRepositoryProtocol
 
-        /// The state of retrieving the workout sessions to display in the log.
         var loadState: LoadState<WeatherResponse, any Error> = .loading
 
         init(homeWeatherHeaderDataRepository: HomeWeatherHeaderDataRepositoryProtocol = HomeWeatherHeaderDataRepository()) {

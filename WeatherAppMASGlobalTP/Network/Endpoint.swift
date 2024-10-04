@@ -10,6 +10,7 @@ import Foundation
 enum Endpoint {
 
     case getCurrentWeather
+    case getHourlyForecast
 
     var request: URLRequest? {
         guard let url else {
@@ -38,12 +39,15 @@ enum Endpoint {
         switch self {
         case .getCurrentWeather:
             "/data/2.5/weather"
+        case .getHourlyForecast:
+            "/data/2.5/forecast"
         }
     }
 
     private var queryItems: [URLQueryItem] {
         switch self {
-        case .getCurrentWeather:
+        case .getCurrentWeather,
+             .getHourlyForecast:
             [
                 URLQueryItem(name: "q", value: "buffalo"),
                 URLQueryItem(name: "appid", value: "93fc112871e2f24aba37f420bf035e68"),
@@ -54,7 +58,8 @@ enum Endpoint {
 
     private var httpMethod: String {
         switch self {
-        case .getCurrentWeather:
+        case .getCurrentWeather,
+             .getHourlyForecast:
             HTTP.Method.get.rawValue
         }
     }
