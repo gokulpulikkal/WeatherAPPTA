@@ -37,7 +37,7 @@ enum Endpoint {
     private var path: String {
         switch self {
         case .getCurrentWeather:
-            "/data/2.5//weather"
+            "/data/2.5/weather"
         }
     }
 
@@ -45,9 +45,9 @@ enum Endpoint {
         switch self {
         case .getCurrentWeather:
             [
-                URLQueryItem(name: "lat", value: "\(44.34)"),
-                URLQueryItem(name: "lon", value: "\(10.99)"),
-                URLQueryItem(name: "appid", value: "93fc112871e2f24aba37f420bf035e68")
+                URLQueryItem(name: "q", value: "buffalo"),
+                URLQueryItem(name: "appid", value: "93fc112871e2f24aba37f420bf035e68"),
+                URLQueryItem(name: "units", value: "metric")
             ]
         }
     }

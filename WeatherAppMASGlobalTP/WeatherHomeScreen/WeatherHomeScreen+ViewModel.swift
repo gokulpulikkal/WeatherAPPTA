@@ -25,8 +25,7 @@ extension WeatherHomeScreen {
         func getCurrentWeatherData() async {
             do {
                 let currentWeatherResponse = try await homeWeatherDataRepository.getCurrentWeather()
-//                loadState = .success(currentWeatherResponse)
-                loadState = .failure(RequestError.unknown)
+                loadState = .success(currentWeatherResponse)
             } catch {
                 loadState = .failure(error)
             }
