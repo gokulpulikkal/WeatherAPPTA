@@ -25,6 +25,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
             let navigationController = UINavigationController.init()
+            navigationController.navigationBar.prefersLargeTitles = true
             appCoordinator = AppCoordinator(navCon: navigationController)
             window.rootViewController = navigationController
             self.window = window

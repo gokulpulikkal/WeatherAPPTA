@@ -20,7 +20,8 @@ class AppCoordinator: Coordinator {
     }
 
     func start() {
-        navigationController.pushViewController(UIHostingController(rootView: WeatherHomeScreen()), animated: true)
+//        navigationController.pushViewController(UIHostingController(rootView: WeatherHomeScreen()), animated: true)
+        navigationController.pushViewController(UIHostingController(rootView: CitySearchScreen()), animated: true)
     }
 
 }
