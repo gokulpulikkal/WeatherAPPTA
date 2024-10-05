@@ -7,8 +7,10 @@
 
 import Foundation
 
+/// Enum to encapsulate HTTP-related constants and types.
 enum HTTP {
 
+    /// Enum representing different HTTP methods.
     enum Method: String {
         case get = "GET"
         case post = "POST"
@@ -16,6 +18,7 @@ enum HTTP {
         case delete = "DELETE"
     }
 
+    /// Enum to define HTTP headers.
     enum Headers {
 
         enum Key: String {

@@ -7,14 +7,25 @@
 
 import Foundation
 
+/// Enum to define various API endpoints
 enum Endpoint {
 
+    /// Endpoint for fetching current weather by city name.
     case getCurrentWeather(cityName: String)
+
+    /// Endpoint for fetching hourly forecast by city name.
     case getHourlyForecast(cityName: String)
+
+    /// Endpoint for fetching a list of cities by city name.
     case getCityList(cityName: String)
+
+    /// Endpoint for fetching city information by ZIP code.
     case getCity(cityZip: Int)
+
+    /// Endpoint for fetching city list from geographical coordinates.
     case getCityListFromCoordinates(lat: Double, long: Double)
 
+    /// Computed property to create a URLRequest for the endpoint.
     var request: URLRequest? {
         guard let url else {
             return nil
@@ -26,6 +37,7 @@ enum Endpoint {
         return request
     }
 
+    /// Computed property to build the URL for the endpoint.
     private var url: URL? {
         var components = URLComponents()
         components.scheme = scheme
@@ -38,6 +50,7 @@ enum Endpoint {
         return components.url
     }
 
+    /// Computed property to define the endpoint path based on the case.
     private var path: String {
         switch self {
         case .getCurrentWeather:
@@ -53,6 +66,7 @@ enum Endpoint {
         }
     }
 
+    /// Computed property to define the query items needed for the request.
     private var queryItems: [URLQueryItem] {
         switch self {
         case let .getCurrentWeather(cityName),
@@ -83,6 +97,7 @@ enum Endpoint {
         }
     }
 
+    /// Computed property to define the HTTP method used for the request.
     private var httpMethod: String {
         switch self {
         case .getCurrentWeather,
@@ -94,6 +109,7 @@ enum Endpoint {
         }
     }
 
+    /// Computed property to define the HTTP body
     private var httpBody: Data? {
         switch self {
         default:
@@ -101,6 +117,7 @@ enum Endpoint {
         }
     }
 
+    /// Computed property to define the base URL for the API.
     private var baseURL: String? {
         switch self {
         default:
@@ -108,6 +125,7 @@ enum Endpoint {
         }
     }
 
+    /// Computed property to define the scheme for the API (http or https).
     private var scheme: String? {
         switch self {
         default:
@@ -115,6 +133,7 @@ enum Endpoint {
         }
     }
 
+    /// Computed property to define the port for the API.
     private var port: Int? {
         switch self {
         default:
@@ -123,6 +142,7 @@ enum Endpoint {
     }
 }
 
+/// Extension to add values to URLRequest for specific endpoints.
 extension URLRequest {
     mutating func addValues(for endpoint: Endpoint) {
         switch endpoint {

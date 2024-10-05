@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Enum to represent different types of errors that can occur during a network request.
 enum RequestError: Error {
     case decode
     case invalidURL
@@ -18,11 +19,11 @@ enum RequestError: Error {
     var customMessage: String {
         switch self {
         case .decode:
-            return "Decode error"
+            "Decode error"
         case .unauthorised:
-            return "Session expired"
+            "Session expired"
         default:
-            return "Unknown error"
+            "Unknown error"
         }
     }
 }

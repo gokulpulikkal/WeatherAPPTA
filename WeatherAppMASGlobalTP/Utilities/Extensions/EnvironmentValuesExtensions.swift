@@ -8,5 +8,7 @@
 import SwiftUI
 
 extension EnvironmentValues {
+
+    /// Custom environment variable and it's default value
     @Entry var city = City(name: "Cupertino", state: "CA", country: "US")
 }

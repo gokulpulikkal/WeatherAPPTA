@@ -5,21 +5,22 @@
 //  Created by Gokul P on 03/10/24.
 //
 
-
-/// A value that represents either a success, failure, or intermediary loading state.
+/// Enum to represent the loading state of an asynchronous operation.
 public enum LoadState<Success: Equatable & Sendable, Failure: Error>: Sendable {
-    /// The state of loading.
+
+    /// Represents the loading state where data is being fetched.
     case loading
 
-    /// A success, storing a success value.
+    /// Represents a successful loading state, containing the fetched data.
     case success(Success)
 
-    /// A failure, storing an error.
+    /// Represents a failure state, containing an error indicating what went wrong.
     case failure(Failure)
 }
 
 // MARK: - Equatable
 
+/// Conformance to Equatable to allow comparison of LoadState instances.
 extension LoadState: Equatable {
     public static func == (lhs: LoadState<Success, Failure>, rhs: LoadState<Success, Failure>) -> Bool {
         switch (lhs, rhs) {
