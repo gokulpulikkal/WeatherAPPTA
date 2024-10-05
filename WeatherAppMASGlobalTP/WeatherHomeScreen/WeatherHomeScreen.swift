@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WeatherHomeScreen: View {
 
+    @Environment(\.verticalSizeClass) var verticalSizeClass
     @State private var viewModel: ViewModel
 
     init(viewModel: ViewModel) {
@@ -23,41 +24,64 @@ struct WeatherHomeScreen: View {
                 endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
+            if verticalSizeClass == .compact {
+                landscapeView
+            } else {
+                portraitView
+            }
+        }
+        .navigationBarHidden(true)
+    }
+
+    var portraitView: some View {
+        VStack {
+            hamburgerMenuView
+            Spacer()
+            VStack {
+                WeatherHomeHeaderView()
+                WeatherHourlyForecastView()
+                    .padding(.vertical)
+            }
+            .environment(\.city, viewModel.city)
+            Spacer()
+        }
+        .padding()
+    }
+
+    var landscapeView: some View {
+        VStack {
             VStack {
                 HStack {
                     Spacer()
-                    Button(action: {
-                        viewModel.loadSearchScreen()
-                    }, label: {
-                        Image(systemName: "line.3.horizontal")
-                            .font(.system(size: 30))
-                    })
-                    .tint(.primary)
-                }
-                Spacer()
-                VStack {
                     WeatherHomeHeaderView()
-                    WeatherHourlyForecastView()
-                        .frame(height: 100)
-                        .padding()
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(
-                                    .white.opacity(0.2)
-                                        .shadow(.drop(
-                                            color: .black.opacity(0.3),
-                                            radius: 10
-                                        ))
-                                )
-                        )
-                        .padding(.vertical)
+                    Spacer()
+                    VStack {
+                        hamburgerMenuView
+                            .frame(width: 100)
+                        Spacer()
+                    }
+                    .padding(.top, 30)
                 }
-                .environment(\.city, viewModel.city)
-                Spacer()
+                WeatherHourlyForecastView()
+                    .padding(.vertical)
             }
-            .padding()
+            .environment(\.city, viewModel.city)
+            Spacer()
         }
-        .navigationBarHidden(true)
+        .padding()
+    }
+
+    var hamburgerMenuView: some View {
+        HStack {
+            Spacer()
+            Button(action: {
+                viewModel.loadSearchScreen()
+            }, label: {
+                Image(systemName: "line.3.horizontal")
+                    .font(.system(size: 30))
+            })
+            .tint(.primary)
+        }
     }
 }
 

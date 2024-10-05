@@ -50,6 +50,18 @@ struct WeatherHourlyForecastView: View {
                 errorView
             }
         }
+        .frame(height: 100)
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(
+                    .white.opacity(0.2)
+                        .shadow(.drop(
+                            color: .black.opacity(0.3),
+                            radius: 10
+                        ))
+                )
+        )
         .task {
             await viewModel.getHourlyWeatherData(city: city)
         }
