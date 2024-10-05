@@ -9,16 +9,23 @@ import Foundation
 import SwiftUI
 import UIKit
 
+/// AppCoordinator class responsible for managing the app's navigation flow.
 class AppCoordinator: Coordinator {
 
+    /// Reference to the parent coordinator
     var parentCoordinator: Coordinator?
+
+    /// Array to hold child coordinators.
     var children: [Coordinator] = []
+
+    /// UINavigationController to manage navigation stack.
     var navigationController: UINavigationController
 
     init(navCon: UINavigationController) {
         self.navigationController = navCon
     }
 
+    /// Starts the navigation flow of the app.
     func start() {
         if let city = UserDefaultsManager.shared.load(
             forKey: Constants.UserDefaultKeys.savedCity.rawValue,
@@ -45,7 +52,10 @@ class AppCoordinator: Coordinator {
 
 // MARK: - LaunchNavigationProtocol
 
+/// Extending AppCoordinator to conform to LaunchNavigationProtocol.
 extension AppCoordinator: LaunchNavigationProtocol {
+
+    /// Navigate to the search screen.
     func goToSearchScreen() {
         navigationController.pushViewController(
             UIHostingController(rootView: CitySearchView(viewModel: CitySearchView.ViewModel(navigation: self))),
@@ -53,6 +63,7 @@ extension AppCoordinator: LaunchNavigationProtocol {
         )
     }
 
+    /// Set the home screen as the root view controller.
     func makeHomeScreenRoot() {
         if let city = UserDefaultsManager.shared.load(
             forKey: Constants.UserDefaultKeys.savedCity.rawValue,
@@ -65,6 +76,7 @@ extension AppCoordinator: LaunchNavigationProtocol {
         }
     }
 
+    /// Pop the current screen from the navigation stack.
     func popScreenFromNavigation() {
         navigationController.popViewController(animated: true)
     }
