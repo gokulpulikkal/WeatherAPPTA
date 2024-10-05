@@ -8,19 +8,31 @@
 import CoreLocation
 import Foundation
 
+/// LocationManager class is responsible for managing location services and retrieving city information based on the
+/// user's location.
 final class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
 
+    /// Protocol for accessing geo-location data repository.
     var geoLocationDataRepository: GeoLocationDataRepositoryProtocol
+
+    /// Stores the last known geographical coordinates.
     var lastKnownLocation: CLLocationCoordinate2D?
+
+    /// Instance of CLLocationManager to manage location updates.
     var manager = CLLocationManager()
 
+    /// Flag to indicate if location services are active. If set false no geo-coding with coordinates will happen
     var locationServiceIsActive = false
+
+    /// Published property to store the current city based on location.
     @Published var locationCity: City?
 
+    /// Initializer that sets up the geoLocationDataRepository, using a default implementation if none is provided.
     init(geoLocationDataRepository: GeoLocationDataRepositoryProtocol = GeoLocationDataRepository()) {
         self.geoLocationDataRepository = geoLocationDataRepository
     }
 
+    /// Checks the authorization status for location services and starts updating the location.
     func checkLocationAuthorization() {
         manager.delegate = self
         manager.startUpdatingLocation()
@@ -51,11 +63,13 @@ final class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObje
         }
     }
 
+    /// Delegate method triggered whenever the authorization status changes.
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         // Trigged every time authorization status changes
         checkLocationAuthorization()
     }
 
+    /// Delegate method called when the location manager updates the user's location.
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         lastKnownLocation = locations.first?.coordinate
         Task {
@@ -63,8 +77,10 @@ final class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObje
         }
     }
 
+    /// Asynchronously retrieves the city name from the last known location's coordinates.
     @MainActor
     func getCityFromLocation() async {
+        // Ensure that location services are active and a last known location exists.
         guard locationServiceIsActive, let lastKnownLocation else {
             return
         }

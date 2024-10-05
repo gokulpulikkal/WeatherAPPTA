@@ -7,8 +7,11 @@
 
 import Foundation
 
+/// Implementation of the GeoLocationDataRepositoryProtocol for fetching city information based on geographical
+/// coordinates.
 class GeoLocationDataRepository: GeoLocationDataRepositoryProtocol, NetworkServiceProtocol {
 
+    /// Asynchronously fetches a list of cities from the provided latitude and longitude coordinates.
     func getCityFromCoordinates(lat: Double, long: Double) async throws -> [City] {
         guard let request = Endpoint.getCityListFromCoordinates(
             lat: lat,
