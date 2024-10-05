@@ -8,13 +8,18 @@
 import CoreLocation
 import Foundation
 
-final class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject, NetworkServiceProtocol {
+final class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
 
+    var geoLocationDataRepository: GeoLocationDataRepositoryProtocol
     var lastKnownLocation: CLLocationCoordinate2D?
     var manager = CLLocationManager()
 
-    var locationServiceIsActive: Bool = false
+    var locationServiceIsActive = false
     @Published var locationCity: City?
+
+    init(geoLocationDataRepository: GeoLocationDataRepositoryProtocol = GeoLocationDataRepository()) {
+        self.geoLocationDataRepository = geoLocationDataRepository
+    }
 
     func checkLocationAuthorization() {
         manager.delegate = self
@@ -57,26 +62,19 @@ final class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObje
     }
 
     func getCityFromLocation() {
-        guard locationServiceIsActive else { return }
+        guard locationServiceIsActive, let lastKnownLocation else {
+            return
+        }
         Task {
             do {
-                guard let coordinates = lastKnownLocation,
-                      let request = Endpoint.getCityListFromCoordinates(
-                          lat: coordinates.latitude,
-                          long: coordinates.longitude
-                      ).request
-                else {
-                    throw RequestError.unknown
-                }
-                let cityList = try await networkManager.makeRequest(
-                    with: request,
-                    respModel: [City].self
+                let cityList = try await geoLocationDataRepository.getCityFromCoordinates(
+                    lat: lastKnownLocation.latitude,
+                    long: lastKnownLocation.longitude
                 )
                 if let city = cityList.first {
                     await MainActor.run {
                         locationCity = city
                     }
-                    
                 }
             } catch {
                 print("Error while reverse decoding location data")

@@ -17,18 +17,14 @@ extension WeatherHomeScreen {
 
         var city: City
 
-        var homeWeatherHeaderDataRepository: HomeWeatherHeaderDataRepositoryProtocol
-
         var shouldUpdateWithCoreLocation = false
 
         var lastUpdatedLocationFromCoreLocation: City?
 
         init(
             city: City,
-            navigation: LaunchNavigationProtocol? = nil,
-            homeWeatherHeaderDataRepository: HomeWeatherHeaderDataRepositoryProtocol = HomeWeatherHeaderDataRepository()
+            navigation: LaunchNavigationProtocol? = nil
         ) {
-            self.homeWeatherHeaderDataRepository = homeWeatherHeaderDataRepository
             self.navigation = navigation
             self.city = city
         }
