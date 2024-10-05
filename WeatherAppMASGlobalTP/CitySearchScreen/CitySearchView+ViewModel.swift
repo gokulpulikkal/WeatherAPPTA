@@ -19,12 +19,16 @@ extension CitySearchView {
         var searchResultList: [City] = []
 
         var loadState: LoadState<[City], any Error> = .loading
-        
+
         weak var navigation: LaunchNavigationProtocol?
 
-        init(navigation: LaunchNavigationProtocol? = nil, citySearchDataRepository: CitySearchDataRepositoryProtocol = CitySearchDataRepository()) {
+        init(
+            navigation: LaunchNavigationProtocol? = nil,
+            citySearchDataRepository: CitySearchDataRepositoryProtocol = CitySearchDataRepository()
+        ) {
             self.citySearchDataRepository = citySearchDataRepository
             self.navigation = navigation
+            self.loadState = .loading
         }
 
         @MainActor
@@ -60,6 +64,7 @@ extension CitySearchView {
                     if Task.isCancelled {
                         return
                     }
+                    searchResultList = cityList
                     loadState = .success(cityList)
                 } catch {
                     loadState = .failure(error)

@@ -19,9 +19,6 @@ extension WeatherHomeScreen {
 
         var homeWeatherHeaderDataRepository: HomeWeatherHeaderDataRepositoryProtocol
 
-        /// The state of retrieving the workout sessions to display in the log.
-        var loadState: LoadState<WeatherResponse, any Error> = .loading
-
         var shouldUpdateWithCoreLocation = false
 
         var lastUpdatedLocationFromCoreLocation: City?

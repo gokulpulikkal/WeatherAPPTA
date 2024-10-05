@@ -7,7 +7,7 @@
 
 import Foundation
 
-class UserDefaultsManager {
+class UserDefaultsManager: UserDefaultsManagerProtocol {
 
     static var shared = UserDefaultsManager()
 
