@@ -5,7 +5,6 @@
 //  Created by Gokul P on 05/10/24.
 //
 
-
 enum WeatherResponseMock {
 
     static func mockWeatherResponse(
