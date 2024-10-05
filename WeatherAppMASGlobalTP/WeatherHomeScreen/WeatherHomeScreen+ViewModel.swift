@@ -36,11 +36,11 @@ extension WeatherHomeScreen {
         func updateLastUpdatedLocationCity(city: City?) {
             lastUpdatedLocationFromCoreLocation = city
             if shouldUpdateWithCoreLocation {
-                updatedCity()
+                updateCity()
             }
         }
 
-        func updatedCity() {
+        func updateCity() {
             guard let lastUpdatedCity = lastUpdatedLocationFromCoreLocation else {
                 return
             }
