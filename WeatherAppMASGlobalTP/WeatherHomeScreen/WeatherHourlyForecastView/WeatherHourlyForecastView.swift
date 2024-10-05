@@ -9,7 +9,10 @@ import SwiftUI
 
 struct WeatherHourlyForecastView: View {
 
+    /// Access the current city from the environment.
     @Environment(\.city) var city
+
+    /// ViewModel to manage the view's state and logic.
     @State private var viewModel = ViewModel()
 
     var body: some View {
@@ -38,16 +41,19 @@ struct WeatherHourlyForecastView: View {
                         ))
                 )
         )
+        // Trigger data loading when the city changes.
         .onChange(of: city) {
             Task {
                 await viewModel.getHourlyWeatherData(city: city)
             }
         }
+        // Load data initially when the view appears.
         .task {
             await viewModel.getHourlyWeatherData(city: city)
         }
     }
 
+    /// View builder function to create a list of hourly forecast items.
     @ViewBuilder
     func forecastListView(_ weatherForecastResponse: WeatherForecastResponse) -> some View {
         LazyHStack {
