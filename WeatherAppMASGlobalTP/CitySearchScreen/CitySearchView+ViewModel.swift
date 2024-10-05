@@ -19,9 +19,21 @@ extension CitySearchView {
         var searchResultList: [City] = []
 
         var loadState: LoadState<[City], any Error> = .loading
+        
+        weak var navigation: LaunchNavigationProtocol?
 
-        init(citySearchDataRepository: CitySearchDataRepositoryProtocol = CitySearchDataRepository()) {
+        init(navigation: LaunchNavigationProtocol? = nil, citySearchDataRepository: CitySearchDataRepositoryProtocol = CitySearchDataRepository()) {
             self.citySearchDataRepository = citySearchDataRepository
+            self.navigation = navigation
+        }
+
+        @MainActor
+        func saveSelectedCity(city: City) async {
+            await UserDefaultsManager.shared.save(
+                city,
+                forKey: Constants.UserDefaultKeys.savedCity.rawValue
+            )
+            navigation?.makeHomeScreenRoot()
         }
 
         func performCitySearch(searchString: String) async {

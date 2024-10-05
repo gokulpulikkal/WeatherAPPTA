@@ -13,22 +13,20 @@ extension WeatherHomeScreen {
     @Observable
     final class ViewModel {
 
+        weak var navigation: LaunchNavigationProtocol?
+        
         var homeWeatherHeaderDataRepository: HomeWeatherHeaderDataRepositoryProtocol
 
         /// The state of retrieving the workout sessions to display in the log.
         var loadState: LoadState<WeatherResponse, any Error> = .loading
 
-        init(homeWeatherHeaderDataRepository: HomeWeatherHeaderDataRepositoryProtocol = HomeWeatherHeaderDataRepository()) {
+        init(navigation: LaunchNavigationProtocol? = nil, homeWeatherHeaderDataRepository: HomeWeatherHeaderDataRepositoryProtocol = HomeWeatherHeaderDataRepository()) {
             self.homeWeatherHeaderDataRepository = homeWeatherHeaderDataRepository
+            self.navigation = navigation
         }
-
-        func getCurrentWeatherData() async {
-            do {
-                let currentWeatherResponse = try await homeWeatherHeaderDataRepository.getCurrentWeather()
-                loadState = .success(currentWeatherResponse)
-            } catch {
-                loadState = .failure(error)
-            }
+        
+        func loadSearchScreen() {
+            navigation?.goToSearchScreen()
         }
     }
 }

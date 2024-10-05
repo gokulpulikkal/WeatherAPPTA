@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import UIKit
 import SwiftUI
+import UIKit
 
 class AppCoordinator: Coordinator {
 
@@ -20,8 +20,47 @@ class AppCoordinator: Coordinator {
     }
 
     func start() {
-//        navigationController.pushViewController(UIHostingController(rootView: WeatherHomeScreen()), animated: true)
-        navigationController.pushViewController(UIHostingController(rootView: CitySearchView()), animated: true)
+        if let city = UserDefaultsManager.shared.load(
+            forKey: Constants.UserDefaultKeys.savedCity.rawValue,
+            as: City.self
+        ) {
+            navigationController.pushViewController(
+                UIHostingController(rootView: WeatherHomeScreen(
+                    viewModel: WeatherHomeScreen
+                        .ViewModel(navigation: self)
+                )),
+                animated: true
+            )
+        } else {
+            navigationController.pushViewController(
+                UIHostingController(rootView: CitySearchView(
+                    viewModel: CitySearchView
+                        .ViewModel(navigation: self)
+                )),
+                animated: true
+            )
+        }
+    }
+}
+
+// MARK: - LaunchNavigationProtocol
+
+extension AppCoordinator: LaunchNavigationProtocol {
+    func goToSearchScreen() {
+        navigationController.pushViewController(
+            UIHostingController(rootView: CitySearchView(viewModel: CitySearchView.ViewModel(navigation: self))),
+            animated: true
+        )
     }
 
+    func makeHomeScreenRoot() {
+        navigationController.setViewControllers([UIHostingController(rootView: WeatherHomeScreen(
+            viewModel: WeatherHomeScreen
+                .ViewModel(navigation: self)
+        ))], animated: true)
+    }
+
+    func popScreenFromNavigation() {
+        navigationController.popViewController(animated: true)
+    }
 }

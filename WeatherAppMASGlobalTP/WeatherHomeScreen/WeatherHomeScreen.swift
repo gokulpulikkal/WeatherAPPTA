@@ -9,7 +9,11 @@ import SwiftUI
 
 struct WeatherHomeScreen: View {
 
-    @State private var viewModel = ViewModel()
+    @State private var viewModel: ViewModel
+
+    init(viewModel: ViewModel) {
+        self.viewModel = viewModel
+    }
 
     var body: some View {
         ZStack {
@@ -19,28 +23,42 @@ struct WeatherHomeScreen: View {
                 endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
-            ScrollView {
-                WeatherHomeHeaderView()
-                WeatherHourlyForecastView()
-                    .frame(height: 100)
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(
-                                .white.opacity(0.2)
-                                    .shadow(.drop(
-                                        color: .black.opacity(0.3),
-                                        radius: 10
-                                    ))
-                            )
-                    )
-                    .padding(.vertical)
+            VStack {
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        viewModel.loadSearchScreen()
+                    }, label: {
+                        Image(systemName: "line.3.horizontal")
+                            .font(.system(size: 30))
+                    })
+                    .tint(.primary)
+                }
+                .padding(.bottom, 20)
+                ScrollView {
+                    WeatherHomeHeaderView()
+                    WeatherHourlyForecastView()
+                        .frame(height: 100)
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(
+                                    .white.opacity(0.2)
+                                        .shadow(.drop(
+                                            color: .black.opacity(0.3),
+                                            radius: 10
+                                        ))
+                                )
+                        )
+                        .padding(.vertical)
+                }
             }
             .padding()
         }
+        .navigationBarHidden(true)
     }
 }
 
 #Preview {
-    WeatherHomeScreen()
+    WeatherHomeScreen(viewModel: WeatherHomeScreen.ViewModel())
 }

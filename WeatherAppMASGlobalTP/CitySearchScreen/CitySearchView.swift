@@ -10,8 +10,12 @@ import SwiftUI
 struct CitySearchView: View {
 
     @State var searchString = ""
-    @State var viewModel = ViewModel()
+    @State var viewModel: ViewModel
     @State private var searchTask: Task<Void, Never>?
+
+    init(viewModel: ViewModel) {
+        self.viewModel = viewModel
+    }
 
     var body: some View {
         VStack {
@@ -35,6 +39,11 @@ struct CitySearchView: View {
                             Text("\(city.country)")
                         }
                         .lineLimit(1)
+                        .onTapGesture {
+                            Task {
+                                await viewModel.saveSelectedCity(city: city)
+                            }
+                        }
                     })
                 }
                 .padding(.vertical)
@@ -49,6 +58,7 @@ struct CitySearchView: View {
                 await viewModel.performCitySearch(searchString: newValue)
             }
         }
+        .navigationBarHidden(false)
         .navigationTitle("Search Cities")
     }
 
@@ -62,5 +72,5 @@ struct CitySearchView: View {
 }
 
 #Preview {
-    CitySearchView()
+    CitySearchView(viewModel: CitySearchView.ViewModel())
 }
