@@ -9,9 +9,13 @@ import SwiftUI
 
 struct WeatherHomeScreen: View {
 
+    /// Access the current device's vertical size class (compact or regular)
     @Environment(\.verticalSizeClass) var verticalSizeClass
 
+    /// State property to manage the view model for this screen
     @State private var viewModel: ViewModel
+
+    /// StateObject to observe the location manager for location services
     @StateObject private var locationManager = LocationManager()
 
     init(viewModel: ViewModel) {
@@ -33,9 +37,11 @@ struct WeatherHomeScreen: View {
             }
         }
         .navigationBarHidden(true)
+        // Update the view model's city based on changes in location
         .onChange(of: locationManager.locationCity) {
             viewModel.updateLastUpdatedLocationCity(city: locationManager.locationCity)
         }
+        // Toggle location services based on the view model's CoreLocation update flag
         .onChange(of: viewModel.shouldUpdateWithCoreLocation) {
             locationManager.locationServiceIsActive = viewModel.shouldUpdateWithCoreLocation
         }
