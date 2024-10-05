@@ -58,27 +58,26 @@ final class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObje
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         lastKnownLocation = locations.first?.coordinate
-        getCityFromLocation()
+        Task {
+            await getCityFromLocation()
+        }
     }
 
-    func getCityFromLocation() {
+    @MainActor
+    func getCityFromLocation() async {
         guard locationServiceIsActive, let lastKnownLocation else {
             return
         }
-        Task {
-            do {
-                let cityList = try await geoLocationDataRepository.getCityFromCoordinates(
-                    lat: lastKnownLocation.latitude,
-                    long: lastKnownLocation.longitude
-                )
-                if let city = cityList.first {
-                    await MainActor.run {
-                        locationCity = city
-                    }
-                }
-            } catch {
-                print("Error while reverse decoding location data")
+        do {
+            let cityList = try await geoLocationDataRepository.getCityFromCoordinates(
+                lat: lastKnownLocation.latitude,
+                long: lastKnownLocation.longitude
+            )
+            if let city = cityList.first {
+                locationCity = city
             }
+        } catch {
+            print("Error while reverse decoding location data")
         }
     }
 }
