@@ -59,7 +59,7 @@ struct CitySearchView: View {
             }
         }
         .navigationBarHidden(false)
-        .navigationTitle("Search Cities")
+        .navigationTitle("Search City")
     }
 
     var errorView: some View {

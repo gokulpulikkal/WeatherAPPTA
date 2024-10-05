@@ -15,12 +15,16 @@ extension WeatherHomeScreen {
 
         weak var navigation: LaunchNavigationProtocol?
 
-        let city: City
+        var city: City
 
         var homeWeatherHeaderDataRepository: HomeWeatherHeaderDataRepositoryProtocol
 
         /// The state of retrieving the workout sessions to display in the log.
         var loadState: LoadState<WeatherResponse, any Error> = .loading
+
+        var shouldUpdateWithCoreLocation = false
+
+        var lastUpdatedLocationFromCoreLocation: City?
 
         init(
             city: City,
@@ -34,6 +38,21 @@ extension WeatherHomeScreen {
 
         func loadSearchScreen() {
             navigation?.goToSearchScreen()
+        }
+
+        func updateLastUpdatedLocationCity(city: City?) {
+            lastUpdatedLocationFromCoreLocation = city
+            if shouldUpdateWithCoreLocation {
+                updatedCity()
+            }
+        }
+
+        func updatedCity() {
+            guard let lastUpdatedCity = lastUpdatedLocationFromCoreLocation else {
+                return
+            }
+            city = lastUpdatedCity
+            shouldUpdateWithCoreLocation = false
         }
     }
 }

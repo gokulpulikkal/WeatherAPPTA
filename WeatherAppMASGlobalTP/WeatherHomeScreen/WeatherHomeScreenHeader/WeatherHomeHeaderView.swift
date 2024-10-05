@@ -23,6 +23,11 @@ struct WeatherHomeHeaderView: View {
                 errorView
             }
         }
+        .onChange(of: city, {
+            Task {
+                await viewModel.getCurrentWeatherData(city: city)
+            }
+        })
         .task {
             await viewModel.getCurrentWeatherData(city: city)
         }

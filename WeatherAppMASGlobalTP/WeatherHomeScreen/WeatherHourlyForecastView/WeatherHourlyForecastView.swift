@@ -19,31 +19,7 @@ struct WeatherHourlyForecastView: View {
                 ProgressView()
             case let .success(weatherForecastResponse):
                 ScrollView(.horizontal) {
-                    LazyHStack {
-                        ForEach(weatherForecastResponse.list, id: \.dt, content: { forecastItem in
-                            VStack {
-                                Text(forecastItem.timeString)
-                                    .font(.subheadline)
-                                AsyncImage(url: forecastItem.weather.first?.iconURL) { image in
-                                    image.resizable()
-                                        .scaledToFill()
-                                } placeholder: {
-                                    ProgressView()
-                                }
-                                .frame(width: 30, height: 30)
-                                Text(
-                                    Measurement<UnitTemperature>(
-                                        value: forecastItem.main.temp.rounded(),
-                                        unit: .celsius
-                                    )
-                                    .formatted(.measurement(
-                                        width: .narrow,
-                                        usage: .weather
-                                    ))
-                                )
-                            }
-                        })
-                    }
+                    forecastListView(weatherForecastResponse)
                 }
                 .scrollIndicators(.hidden)
             case .failure:
@@ -62,8 +38,42 @@ struct WeatherHourlyForecastView: View {
                         ))
                 )
         )
+        .onChange(of: city) {
+            Task {
+                await viewModel.getHourlyWeatherData(city: city)
+            }
+        }
         .task {
             await viewModel.getHourlyWeatherData(city: city)
+        }
+    }
+
+    @ViewBuilder
+    func forecastListView(_ weatherForecastResponse: WeatherForecastResponse) -> some View {
+        LazyHStack {
+            ForEach(weatherForecastResponse.list, id: \.dt, content: { forecastItem in
+                VStack {
+                    Text(forecastItem.timeString)
+                        .font(.subheadline)
+                    AsyncImage(url: forecastItem.weather.first?.iconURL) { image in
+                        image.resizable()
+                            .scaledToFill()
+                    } placeholder: {
+                        ProgressView()
+                    }
+                    .frame(width: 30, height: 30)
+                    Text(
+                        Measurement<UnitTemperature>(
+                            value: forecastItem.main.temp.rounded(),
+                            unit: .celsius
+                        )
+                        .formatted(.measurement(
+                            width: .narrow,
+                            usage: .weather
+                        ))
+                    )
+                }
+            })
         }
     }
 

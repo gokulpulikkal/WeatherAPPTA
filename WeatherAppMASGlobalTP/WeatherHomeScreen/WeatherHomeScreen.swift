@@ -10,7 +10,9 @@ import SwiftUI
 struct WeatherHomeScreen: View {
 
     @Environment(\.verticalSizeClass) var verticalSizeClass
+
     @State private var viewModel: ViewModel
+    @StateObject private var locationManager = LocationManager()
 
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -31,6 +33,12 @@ struct WeatherHomeScreen: View {
             }
         }
         .navigationBarHidden(true)
+        .onChange(of: locationManager.locationCity) {
+            viewModel.updateLastUpdatedLocationCity(city: locationManager.locationCity)
+        }
+        .onChange(of: viewModel.shouldUpdateWithCoreLocation) {
+            locationManager.locationServiceIsActive = viewModel.shouldUpdateWithCoreLocation
+        }
     }
 
     var portraitView: some View {
@@ -75,13 +83,21 @@ struct WeatherHomeScreen: View {
         HStack {
             Spacer()
             Button(action: {
+                viewModel.shouldUpdateWithCoreLocation = true
+                locationManager.checkLocationAuthorization()
+            }, label: {
+                Image(systemName: "location")
+                    .font(.system(size: 20))
+            })
+
+            Button(action: {
                 viewModel.loadSearchScreen()
             }, label: {
                 Image(systemName: "line.3.horizontal")
                     .font(.system(size: 30))
             })
-            .tint(.primary)
         }
+        .tint(.primary)
     }
 }
 

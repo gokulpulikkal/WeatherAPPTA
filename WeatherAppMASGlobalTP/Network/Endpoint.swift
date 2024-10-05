@@ -13,6 +13,7 @@ enum Endpoint {
     case getHourlyForecast(cityName: String)
     case getCityList(cityName: String)
     case getCity(cityZip: Int)
+    case getCityListFromCoordinates(lat: Double, long: Double)
 
     var request: URLRequest? {
         guard let url else {
@@ -47,6 +48,8 @@ enum Endpoint {
             "/geo/1.0/direct"
         case .getCity:
             "/geo/1.0/zip"
+        case .getCityListFromCoordinates:
+            "/geo/1.0/reverse"
         }
     }
 
@@ -70,6 +73,13 @@ enum Endpoint {
                 URLQueryItem(name: "zip", value: "\(zipCode)"),
                 URLQueryItem(name: "appid", value: "93fc112871e2f24aba37f420bf035e68")
             ]
+        case let .getCityListFromCoordinates(lat, long):
+            [
+                URLQueryItem(name: "lat", value: "\(lat)"),
+                URLQueryItem(name: "lon", value: "\(long)"),
+                URLQueryItem(name: "appid", value: "93fc112871e2f24aba37f420bf035e68"),
+                URLQueryItem(name: "limit", value: "\(5)")
+            ]
         }
     }
 
@@ -78,7 +88,8 @@ enum Endpoint {
         case .getCurrentWeather,
              .getHourlyForecast,
              .getCityList,
-             .getCity:
+             .getCity,
+             .getCityListFromCoordinates:
             HTTP.Method.get.rawValue
         }
     }
