@@ -11,17 +11,26 @@ import SwiftUI
 
 extension CitySearchView {
 
+    /// ViewModel class for managing the state and logic of the CitySearchView.
     @Observable
     final class ViewModel {
 
+        /// Property to access the city search data repository.
         let citySearchDataRepository: CitySearchDataRepositoryProtocol
 
+        /// Array to hold the search results for cities.
         var searchResultList: [City] = []
 
+        /// Property to manage the loading state of the city search results.
         var loadState: LoadState<[City], any Error> = .loading
 
+        /// Weak reference to the navigation protocol to manage screen transitions.
         weak var navigation: LaunchNavigationProtocol?
 
+        /// Initializer for the ViewModel.
+        /// - Parameter navigation: An optional navigation protocol to handle navigation actions.
+        /// - Parameter citySearchDataRepository: A repository for city search data, defaulting to a new
+        /// CitySearchDataRepository.
         init(
             navigation: LaunchNavigationProtocol? = nil,
             citySearchDataRepository: CitySearchDataRepositoryProtocol = CitySearchDataRepository()
@@ -31,6 +40,8 @@ extension CitySearchView {
             self.loadState = .loading
         }
 
+        /// Asynchronously saves the selected city to UserDefaults and navigates to the home screen.
+        /// - Parameter city: The City object to be saved.
         @MainActor
         func saveSelectedCity(city: City) async {
             await UserDefaultsManager.shared.save(
@@ -40,6 +51,8 @@ extension CitySearchView {
             navigation?.makeHomeScreenRoot()
         }
 
+        /// Asynchronously performs a search for a city based on the provided search string.
+        /// - Parameter searchString: The string to search for cities, which can be either a city name or ZIP code.
         func performCitySearch(searchString: String) async {
             guard searchString.count >= 3 else {
                 loadState = .loading

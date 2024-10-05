@@ -9,10 +9,16 @@ import SwiftUI
 
 struct CitySearchView: View {
 
+    /// State variable to hold the user input for the search string.
     @State var searchString = ""
+
+    /// State variable to hold the ViewModel for managing the city search logic.
     @State var viewModel: ViewModel
+
+    /// State variable to manage the current search task for debouncing user input.
     @State private var searchTask: Task<Void, Never>?
 
+    /// Initializer for the CitySearchView that requires a ViewModel.
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
     }
@@ -51,6 +57,7 @@ struct CitySearchView: View {
                 errorView
             }
         }
+        // Enable search functionality tied to the searchString.
         .searchable(text: $searchString)
         .onChange(of: searchString) { _, newValue in
             searchTask?.cancel()
