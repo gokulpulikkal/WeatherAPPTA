@@ -27,7 +27,7 @@ class AppCoordinator: Coordinator {
             navigationController.pushViewController(
                 UIHostingController(rootView: WeatherHomeScreen(
                     viewModel: WeatherHomeScreen
-                        .ViewModel(navigation: self)
+                        .ViewModel(city: city, navigation: self)
                 )),
                 animated: true
             )
@@ -54,10 +54,15 @@ extension AppCoordinator: LaunchNavigationProtocol {
     }
 
     func makeHomeScreenRoot() {
-        navigationController.setViewControllers([UIHostingController(rootView: WeatherHomeScreen(
-            viewModel: WeatherHomeScreen
-                .ViewModel(navigation: self)
-        ))], animated: true)
+        if let city = UserDefaultsManager.shared.load(
+            forKey: Constants.UserDefaultKeys.savedCity.rawValue,
+            as: City.self
+        ) {
+            navigationController.setViewControllers([UIHostingController(rootView: WeatherHomeScreen(
+                viewModel: WeatherHomeScreen
+                    .ViewModel(city: city, navigation: self)
+            ))], animated: true)
+        }
     }
 
     func popScreenFromNavigation() {

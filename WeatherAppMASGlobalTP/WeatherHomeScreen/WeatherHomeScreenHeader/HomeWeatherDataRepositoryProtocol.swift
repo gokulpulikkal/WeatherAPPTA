@@ -9,6 +9,6 @@ import Foundation
 
 protocol HomeWeatherHeaderDataRepositoryProtocol {
 
-    func getCurrentWeather() async throws -> WeatherResponse
+    func getCurrentWeather(cityName: String) async throws -> WeatherResponse
 
 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WeatherHourlyForecastView: View {
 
+    @Environment(\.city) var city
     @State private var viewModel = ViewModel()
 
     var body: some View {
@@ -50,7 +51,7 @@ struct WeatherHourlyForecastView: View {
             }
         }
         .task {
-            await viewModel.getHourlyWeatherData()
+            await viewModel.getHourlyWeatherData(city: city)
         }
     }
 

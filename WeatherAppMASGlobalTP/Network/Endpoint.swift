@@ -9,8 +9,8 @@ import Foundation
 
 enum Endpoint {
 
-    case getCurrentWeather
-    case getHourlyForecast
+    case getCurrentWeather(cityName: String)
+    case getHourlyForecast(cityName: String)
     case getCityList(cityName: String)
     case getCity(cityZip: Int)
 
@@ -52,20 +52,20 @@ enum Endpoint {
 
     private var queryItems: [URLQueryItem] {
         switch self {
-        case .getCurrentWeather,
-             .getHourlyForecast:
+        case let .getCurrentWeather(cityName),
+             let .getHourlyForecast(cityName):
             [
-                URLQueryItem(name: "q", value: "buffalo"),
+                URLQueryItem(name: "q", value: cityName),
                 URLQueryItem(name: "appid", value: "93fc112871e2f24aba37f420bf035e68"),
                 URLQueryItem(name: "units", value: "metric")
             ]
-        case .getCityList(let cityName):
+        case let .getCityList(cityName):
             [
                 URLQueryItem(name: "q", value: cityName),
                 URLQueryItem(name: "appid", value: "93fc112871e2f24aba37f420bf035e68"),
                 URLQueryItem(name: "limit", value: "\(5)")
             ]
-        case .getCity(let zipCode):
+        case let .getCity(zipCode):
             [
                 URLQueryItem(name: "zip", value: "\(zipCode)"),
                 URLQueryItem(name: "appid", value: "93fc112871e2f24aba37f420bf035e68")

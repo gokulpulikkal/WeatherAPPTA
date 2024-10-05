@@ -34,8 +34,8 @@ struct WeatherHomeScreen: View {
                     })
                     .tint(.primary)
                 }
-                .padding(.bottom, 20)
-                ScrollView {
+                Spacer()
+                VStack {
                     WeatherHomeHeaderView()
                     WeatherHourlyForecastView()
                         .frame(height: 100)
@@ -52,6 +52,8 @@ struct WeatherHomeScreen: View {
                         )
                         .padding(.vertical)
                 }
+                .environment(\.city, viewModel.city)
+                Spacer()
             }
             .padding()
         }
@@ -60,5 +62,5 @@ struct WeatherHomeScreen: View {
 }
 
 #Preview {
-    WeatherHomeScreen(viewModel: WeatherHomeScreen.ViewModel())
+    WeatherHomeScreen(viewModel: WeatherHomeScreen.ViewModel(city: City(name: "Buffalo", state: "NY", country: "US")))
 }

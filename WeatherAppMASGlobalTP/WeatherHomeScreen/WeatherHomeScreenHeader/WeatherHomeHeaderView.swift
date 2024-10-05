@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WeatherHomeHeaderView: View {
 
+    @Environment(\.city) var city
     @State private var viewModel = ViewModel()
 
     var body: some View {
@@ -23,7 +24,7 @@ struct WeatherHomeHeaderView: View {
             }
         }
         .task {
-            await viewModel.getCurrentWeatherData()
+            await viewModel.getCurrentWeatherData(city: city)
         }
     }
 

@@ -16,13 +16,16 @@ extension WeatherHomeHeaderView {
 
         var loadState: LoadState<WeatherResponse, any Error> = .loading
 
-        init(homeWeatherHeaderDataRepository: HomeWeatherHeaderDataRepositoryProtocol = HomeWeatherHeaderDataRepository()) {
+        init(
+            homeWeatherHeaderDataRepository: HomeWeatherHeaderDataRepositoryProtocol =
+                HomeWeatherHeaderDataRepository()
+        ) {
             self.homeWeatherHeaderDataRepository = homeWeatherHeaderDataRepository
         }
 
-        func getCurrentWeatherData() async {
+        func getCurrentWeatherData(city: City) async {
             do {
-                let currentWeatherResponse = try await homeWeatherHeaderDataRepository.getCurrentWeather()
+                let currentWeatherResponse = try await homeWeatherHeaderDataRepository.getCurrentWeather(cityName: city.name)
                 loadState = .success(currentWeatherResponse)
             } catch {
                 loadState = .failure(error)

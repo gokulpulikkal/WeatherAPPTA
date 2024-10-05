@@ -24,9 +24,10 @@ extension WeatherHourlyForecastView {
             self.weatherHourlyForecastDataRepository = weatherHourlyForecastDataRepository
         }
 
-        func getHourlyWeatherData() async {
+        func getHourlyWeatherData(city: City) async {
             do {
-                let currentHourlyForecast = try await weatherHourlyForecastDataRepository.getCurrentForecastWeather()
+                let currentHourlyForecast = try await weatherHourlyForecastDataRepository
+                    .getCurrentForecastWeather(cityName: city.name)
                 loadState = .success(currentHourlyForecast)
             } catch {
                 loadState = .failure(error)

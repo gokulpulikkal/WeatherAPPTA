@@ -9,8 +9,8 @@ import Foundation
 
 class WeatherHourlyForecastDataRepository: WeatherHourlyForecastDataRepositoryProtocol, NetworkServiceProtocol {
 
-    func getCurrentForecastWeather() async throws -> WeatherForecastResponse {
-        guard let request = Endpoint.getHourlyForecast.request else {
+    func getCurrentForecastWeather(cityName: String) async throws -> WeatherForecastResponse {
+        guard let request = Endpoint.getHourlyForecast(cityName: cityName).request else {
             throw RequestError.unknown
         }
         return try await networkManager.makeRequest(

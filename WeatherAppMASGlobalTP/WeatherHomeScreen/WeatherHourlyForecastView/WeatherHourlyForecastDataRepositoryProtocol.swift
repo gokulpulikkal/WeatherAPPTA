@@ -9,6 +9,6 @@ import Foundation
 
 protocol WeatherHourlyForecastDataRepositoryProtocol {
 
-    func getCurrentForecastWeather() async throws -> WeatherForecastResponse
+    func getCurrentForecastWeather(cityName: String) async throws -> WeatherForecastResponse
 
 }

@@ -9,8 +9,8 @@ import Foundation
 
 class HomeWeatherHeaderDataRepository: HomeWeatherHeaderDataRepositoryProtocol, NetworkServiceProtocol {
 
-    func getCurrentWeather() async throws -> WeatherResponse {
-        guard let request = Endpoint.getCurrentWeather.request else {
+    func getCurrentWeather(cityName: String) async throws -> WeatherResponse {
+        guard let request = Endpoint.getCurrentWeather(cityName: cityName).request else {
             throw RequestError.unknown
         }
         return try await networkManager.makeRequest(
